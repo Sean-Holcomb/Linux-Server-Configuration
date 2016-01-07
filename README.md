@@ -45,26 +45,26 @@ $ sudo apt-get upgrade
 ### (5) Change the SSH port from 22 to 2200
 <a href="http://askubuntu.com/questions/16650/create-a-new-ssh-user-on-ubuntu-server">Source</a>
 
-1. open config file
+open config file
 ```
 nano /etc/ssh/sshd_config
 ```
-2. Change port from 22 to 200
-3. Change PermitRootLogin to no
-4. Change PasswordAuthentication to yes
-5. append these lines to the file
+Change port from 22 to 200
+Change PermitRootLogin to no
+Change PasswordAuthentication to yes
+append these lines to the file
 ```
 UseDNS no
 AllowUsers grader
 ```
-6. restart ssh
+#### restart ssh
 <a href="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server">Source</a>
 
 ```
 $service ssh restart
 ```
 
-7. Create an SSH key pair for login as grader
+#### Create an SSH key pair for login as grader
 
 ```
 $ ssh-keygen
@@ -72,7 +72,7 @@ $ ssh-copy-id grader@YOUR-IP-ADDRESSS -p2200
 $ ssh -v grader@YOUR-IP-ADDRESSS -p2200
 ```
 
-8. Reopen config file and change PasswordAuthentication to no
+#### Reopen config file and change PasswordAuthentication to no
 
 ```
 $ sudo vim /etc/ssh/sshd_config
@@ -122,19 +122,19 @@ $ sudo nano /etc/postgresql/9.3/main/pg_hba.conf
 
 * Create a new user named catalog that has limited permissions to your catalog application database.
 
-1. create linux user catalog
+#### create linux user catalog
 
 ```
 $ sudo adduser catalog
 ```
 
-2. Switch to postgres user and open postgresql
+#### Switch to postgres user and open postgresql
 
 ```
 $ su -u postgres -i
 $ psql
 ```
-3. Prompt should now end with #. Create new user and give it permission to create databases. check that the user was created properly then make the databse and restrict access to it.
+#### Prompt should now end with #. Create new user and give it permission to create databases. check that the user was created properly then make the databse and restrict access to it.
 
 ```
 # CREATE USER catalog WITH PASSWORD 'DB-PASSWORD'; //This password will be used later
@@ -150,13 +150,13 @@ $ psql
 
 ### (10) Install git, clone and setup your Catalog App project (from your GitHub repository from earlier in the Nanodegree program) so that it functions correctly when visiting your server’s IP address in a browser. Remember to set this up appropriately so that your .git directory is not publicly accessible via a browser!
 
-1. Install git and protect .git
+#### Install git and protect .git
 
 ```
 $ sudo apt-get install git
 ```
 
-2. Go to the www dirrectory and create a directory catalog
+#### Go to the www dirrectory and create a directory catalog
 
 ```
 $ cd /var/www/
@@ -164,7 +164,7 @@ $ mkdir catalog
 $ cd catalog
 ```
 
-3. Make .git file inaccessable
+#### Make .git file inaccessable
 
 ```
 $ sudo nano .htaccess
@@ -172,7 +172,7 @@ $ sudo nano .htaccess
 
 add line `RedirectMatch 404 /\.git`
 
-4. use git clone to bring in web, rename the resulting dirrectory catalog
+#### use git clone to bring in web, rename the resulting dirrectory catalog
 
 ```
 $ git clone ADDRESS-FROM-GITHUB-PROJECT-CLONE-BAR
@@ -181,13 +181,13 @@ $ sudo mv -r CLONED-DIRRECTORY/* catalog
 $ cd catalog
 ```
 
-5. change application.py to __init__.py
+#### change application.py to __init__.py
 
 ```
 $ sudo mv application.py __init__.py
 ```
 
-6. Edit engine in __init__.py, database_setup.py and db_populate.py
+#### Edit engine in __init__.py, database_setup.py and db_populate.py
 use `$ sudo nano` one each of the mentioned files, and find the line.
 
 ```
@@ -200,7 +200,7 @@ replace in each case with
 engine = create_engine(postgresql://catalog:DB-PASSWORD@localhost/catalog')
 ```
 
-7. Modify __init__.py so Google+ login works.
+#### Modify __init__.py so Google+ login works.
 
 ```
 sudo nano __init__.py
@@ -214,7 +214,7 @@ find any reference to client_secret.json and replace it with its full path name
 
 find the line `app.debug = True` and delete it.
 
-8. Install required packages and modules. dont use sudo inside virtualenv as it may cause packages to install incorrectly
+#### Install required packages and modules. dont use sudo inside virtualenv as it may cause packages to install incorrectly
 <a href="http://stackoverflow.com/questions/5420789/how-to-install-psycopg2-with-pip-on-python">Source</a>
 
 ```
@@ -240,7 +240,7 @@ $ python database_setup.py
 $ python db_populate.py
 ```
 
-9. Create a Virtual Host
+#### Create a Virtual Host
 <a href="https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps">Source</a>
 Use '$ sudo nano /etc/apache2/sites-available/catalog.conf' and paste in
 
@@ -267,7 +267,7 @@ Use '$ sudo nano /etc/apache2/sites-available/catalog.conf' and paste in
 
 and replace IP addresses and HOSTNAME
 
-10. Create .wsgi file
+#### Create .wsgi file
 
 ```
 $ cd /var/www/catalog
@@ -287,14 +287,14 @@ paste in
   application.secret_key = 'super_secret_key'
 ```
 
-11. Enable virtual host and restart apache
+#### Enable virtual host and restart apache
 
 ```
 $ sudo a2ensite catalog
 $ sudo service apache2 restart
 ```
 
-12. go to your <a href="https://console.developers.google.com/project">Google Console</a> and add your HOSTNAME to your project's Authorized Javascript Origins and Authorized Redirect URIs.
+#### go to your <a href="https://console.developers.google.com/project">Google Console</a> and add your HOSTNAME to your project's Authorized Javascript Origins and Authorized Redirect URIs.
 
 ## Extra Credit
 
